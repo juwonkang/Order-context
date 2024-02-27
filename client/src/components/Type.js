@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Products from './Products'
 import Options from './Options'
+import Error from './Error'
 
 const Type = ({ orderType }) => {
   const [items, setItems] = useState([])
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     loadItems(orderType)
@@ -15,11 +17,13 @@ const Type = ({ orderType }) => {
       const response = await axios.get(`http://localhost:4000/${orderType}`)
       setItems(response.data)
     } catch (error) {
-      console.error(error)
+      setError(true)
     }
   }
-
-  const ItemComponent = orderType === 'products' ? Products : Option
+  if (error) {
+    return <Error message="에러가 발생했습니다" />
+  }
+  const ItemComponent = orderType === 'products' ? Products : Options
 
   const optionItems = items.map((item) => (
     <ItemComponent key={item.name} name={item.name} imagePath={item.imagePath} />
@@ -32,7 +36,7 @@ const Type = ({ orderType }) => {
       <div
         style={{
           display: 'flex',
-          flexDirection: orderType === 'Options' ? 'column' : 'row',
+          flexDirection: orderType === 'options' ? 'column' : 'row',
         }}
       >
         {optionItems}
