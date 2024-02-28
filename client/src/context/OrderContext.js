@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useState, useMemo } from 'react'
 
 const OrderContext = createContext()
 
@@ -10,6 +10,6 @@ export function OrderContextProvider(props) {
 
   const value = useMemo(() => {
     return [{ ...orderCounts }]
-  }, [second])
+  }, [])
   return <OrderContext.Provider value={value} {...props} />
 }
